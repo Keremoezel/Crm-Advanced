@@ -1,0 +1,18 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme static {
+  --font-sans: 'Public Sans', sans-serif;
+
+  --color-wine-50: #fdf2f3;
+  --color-wine-100: #fce7e8;
+  --color-wine-200: #f9d2d6;
+  --color-wine-300: #f4adb4;
+  --color-wine-400: #ec7e8a;
+  --color-wine-500: #df5264;
+  --color-wine-600: #cb334a;
+  --color-wine-700: #a9253d;
+  --color-wine-800: #8e2239;
+  --color-wine-900: #722F37;
+  --color-wine-950: #44111a;
+}
