@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { isCollapsed, isMobileOpen, toggle, closeMobile } = useSidebar()
+const { can } = useAbility()
 </script>
 
 <template>
@@ -30,9 +31,9 @@ const { isCollapsed, isMobileOpen, toggle, closeMobile } = useSidebar()
 
       <!-- VERWALTUNG -->
       <LayoutAppSidebarGroup label="Verwaltung">
-        <LayoutAppSidebarItem icon="i-lucide-user-cog" label="Benutzer" to="/admin/benutzer" />
-        <LayoutAppSidebarItem icon="i-lucide-shield" label="Rollen & Rechte" to="/admin/rollen" />
-        <LayoutAppSidebarItem icon="i-lucide-settings" label="Einstellungen" to="/admin/einstellungen" />
+        <LayoutAppSidebarItem icon="i-lucide-user-cog" label="Benutzer" to="/admin/benutzer" :disabled="!can('read', 'User')" />
+        <LayoutAppSidebarItem icon="i-lucide-shield" label="Rollen & Rechte" to="/admin/rollen" :disabled="!can('read', 'Role')" />
+        <LayoutAppSidebarItem icon="i-lucide-settings" label="Einstellungen" to="/admin/einstellungen" :disabled="!can('read', 'Setting')" />
       </LayoutAppSidebarGroup>
     </nav>
 
