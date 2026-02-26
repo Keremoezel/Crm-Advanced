@@ -28,3 +28,6 @@ prompt
 .prompt
 nul
 .nul
+.claude
+prompt.md
+prompt

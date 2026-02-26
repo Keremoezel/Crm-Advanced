@@ -1,0 +1,12 @@
+node_modules
+.output
+.nuxt
+.nitro
+dist
+.cache
+.wrangler
+.vercel
+pnpm-lock.yaml
+package-lock.json
+*.min.js
+*.min.css

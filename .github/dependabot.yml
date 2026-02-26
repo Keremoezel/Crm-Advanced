@@ -1,0 +1,41 @@
+version: 2
+updates:
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    open-pull-requests-limit: 10
+    labels:
+      - 'chore'
+      - 'dependencies'
+    groups:
+      nuxt:
+        patterns:
+          - 'nuxt*'
+          - '@nuxt/*'
+          - '@nuxthub/*'
+      drizzle:
+        patterns:
+          - 'drizzle-*'
+      testing:
+        patterns:
+          - 'vitest*'
+          - '@vue/test-utils'
+          - '@playwright/*'
+          - '@nuxt/test-utils'
+      lint-format:
+        patterns:
+          - 'eslint*'
+          - 'prettier*'
+          - 'husky'
+          - 'lint-staged'
+          - '@commitlint/*'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    labels:
+      - 'chore'
+      - 'ci'
