@@ -40,7 +40,7 @@
     "@nuxt/ui": "^4.4.0",
     "@nuxthub/core": "^0.10.1",
     "@upstash/redis": "^1.35.7",
-    "@vercel/blob": "^2.0.0",
+    "@vercel/blob": "^2.3.0",
     "drizzle-kit": "^0.31.8",
     "drizzle-orm": "^0.45.1",
     "nuxt": "^4.2.2",
