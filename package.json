@@ -39,7 +39,7 @@
     "@nuxt/eslint": "^1.12.1",
     "@nuxt/ui": "^4.4.0",
     "@nuxthub/core": "^0.10.1",
-    "@upstash/redis": "^1.35.7",
+    "@upstash/redis": "^1.36.3",
     "@vercel/blob": "^2.0.0",
     "drizzle-kit": "^0.31.8",
     "drizzle-orm": "^0.45.1",
