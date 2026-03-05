@@ -1,4 +1,4 @@
-import { seedRoles } from '../db/seed'
+import { seedRoles, seedCustomers } from '../db/seed'
 
 export default defineNitroPlugin((nitroApp) => {
   // NuxtHub applies migrations after plugins load,
@@ -9,8 +9,8 @@ export default defineNitroPlugin((nitroApp) => {
     seeded = true
     try {
       await seedRoles()
-    }
-    catch (error) {
+      await seedCustomers()
+    } catch (error) {
       console.error('[seed] Failed to seed database:', error)
       seeded = false
     }

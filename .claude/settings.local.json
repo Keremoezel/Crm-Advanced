@@ -76,7 +76,11 @@
       "Bash(\"$GH\" project item-list 1 --owner Keremoezel --format json --jq '.items | length')",
       "Bash(\"$GH\" project item-list 1 --owner Keremoezel --limit 50 --format json --jq '.items | length')",
       "Bash(\"$GH\" api repos/Keremoezel/Crm-Advanced/branches/main/protection -X PUT -f \"required_pull_request_reviews[required_approving_review_count]=0\" -f \"required_pull_request_reviews[dismiss_stale_reviews]=true\" -f \"required_status_checks[strict]=true\" -f \"required_status_checks[contexts][]=lint\" -f \"required_status_checks[contexts][]=typecheck\" -f \"required_status_checks[contexts][]=build\" -f \"enforce_admins=false\" -f \"restrictions=null\" --silent)",
-      "Bash(\"$GH\" api repos/Keremoezel/Crm-Advanced/branches/main/protection -X PUT --input - <<'EOF'\n{\n  \"required_status_checks\": {\n    \"strict\": true,\n    \"contexts\": [\"Lint & Format\", \"Type Check\", \"Build\"]\n  },\n  \"enforce_admins\": false,\n  \"required_pull_request_reviews\": {\n    \"required_approving_review_count\": 0,\n    \"dismiss_stale_reviews\": true\n  },\n  \"restrictions\": null\n}\nEOF)"
+      "Bash(\"$GH\" api repos/Keremoezel/Crm-Advanced/branches/main/protection -X PUT --input - <<'EOF'\n{\n  \"required_status_checks\": {\n    \"strict\": true,\n    \"contexts\": [\"Lint & Format\", \"Type Check\", \"Build\"]\n  },\n  \"enforce_admins\": false,\n  \"required_pull_request_reviews\": {\n    \"required_approving_review_count\": 0,\n    \"dismiss_stale_reviews\": true\n  },\n  \"restrictions\": null\n}\nEOF)",
+      "Bash(del \"server\\\\api\\\\customers\\\\import.post.ts\")",
+      "Bash(del \"server\\\\api\\\\customers\\\\import-log.post.ts\")",
+      "Bash(del \"server\\\\api\\\\customers\\\\sample-excel.get.ts\")",
+      "Bash(del \"server\\\\api\\\\customers\\\\[id]\\\\change-log.get.ts\")"
     ]
   }
 }

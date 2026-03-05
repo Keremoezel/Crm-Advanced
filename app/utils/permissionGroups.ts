@@ -1,199 +1,127 @@
-export interface PermissionItem {
+export interface Permission {
+  key: string
+  action: string
   subject: string
   label: string
-  actions: Array<{ key: string, label: string }>
-}
-
-export interface PermissionGroup {
-  label: string
   icon: string
-  items: PermissionItem[]
 }
 
-export const PERMISSION_GROUPS: PermissionGroup[] = [
+export const PERMISSIONS: Permission[] = [
   {
-    label: 'Vertrieb',
-    icon: 'i-lucide-briefcase',
-    items: [
-      {
-        subject: 'Lead',
-        label: 'Leads',
-        actions: [
-          { key: 'create', label: 'Erstellen' },
-          { key: 'read', label: 'Ansehen' },
-          { key: 'update', label: 'Bearbeiten' },
-          { key: 'delete', label: 'Löschen' },
-          { key: 'assign', label: 'Zuweisen' },
-          { key: 'export', label: 'Exportieren' },
-        ],
-      },
-      {
-        subject: 'Contact',
-        label: 'Kontakte',
-        actions: [
-          { key: 'create', label: 'Erstellen' },
-          { key: 'read', label: 'Ansehen' },
-          { key: 'update', label: 'Bearbeiten' },
-          { key: 'delete', label: 'Löschen' },
-          { key: 'export', label: 'Exportieren' },
-        ],
-      },
-      {
-        subject: 'Deal',
-        label: 'Deals',
-        actions: [
-          { key: 'create', label: 'Erstellen' },
-          { key: 'read', label: 'Ansehen' },
-          { key: 'update', label: 'Bearbeiten' },
-          { key: 'delete', label: 'Löschen' },
-          { key: 'approve', label: 'Genehmigen' },
-        ],
-      },
-      {
-        subject: 'Invoice',
-        label: 'Rechnungen',
-        actions: [
-          { key: 'create', label: 'Erstellen' },
-          { key: 'read', label: 'Ansehen' },
-          { key: 'update', label: 'Bearbeiten' },
-          { key: 'delete', label: 'Löschen' },
-          { key: 'export', label: 'Exportieren' },
-        ],
-      },
-    ],
+    key: 'manage:Rights',
+    action: 'manage',
+    subject: 'Rights',
+    label: 'Rechte vergeben',
+    icon: 'i-lucide-shield-check',
   },
   {
-    label: 'Support & Aufgaben',
-    icon: 'i-lucide-life-buoy',
-    items: [
-      {
-        subject: 'Ticket',
-        label: 'Tickets',
-        actions: [
-          { key: 'create', label: 'Erstellen' },
-          { key: 'read', label: 'Ansehen' },
-          { key: 'update', label: 'Bearbeiten' },
-          { key: 'assign', label: 'Zuweisen' },
-        ],
-      },
-      {
-        subject: 'Task',
-        label: 'Aufgaben',
-        actions: [
-          { key: 'create', label: 'Erstellen' },
-          { key: 'read', label: 'Ansehen' },
-          { key: 'update', label: 'Bearbeiten' },
-          { key: 'assign', label: 'Zuweisen' },
-        ],
-      },
-      {
-        subject: 'CalendarEvent',
-        label: 'Kalender',
-        actions: [
-          { key: 'create', label: 'Erstellen' },
-          { key: 'read', label: 'Ansehen' },
-          { key: 'update', label: 'Bearbeiten' },
-        ],
-      },
-    ],
+    key: 'manage:SystemConfig',
+    action: 'manage',
+    subject: 'SystemConfig',
+    label: 'Systemkonfigurationen',
+    icon: 'i-lucide-settings',
   },
   {
-    label: 'Kommunikation',
-    icon: 'i-lucide-phone',
-    items: [
-      {
-        subject: 'Teams',
-        label: 'Telefonie / Teams',
-        actions: [
-          { key: 'call', label: 'Anrufen' },
-        ],
-      },
-      {
-        subject: 'CallLog',
-        label: 'Anrufprotokoll',
-        actions: [
-          { key: 'create', label: 'Erstellen' },
-          { key: 'read', label: 'Ansehen' },
-        ],
-      },
-      {
-        subject: 'EmailThread',
-        label: 'E-Mail',
-        actions: [
-          { key: 'read', label: 'Ansehen' },
-        ],
-      },
-      {
-        subject: 'Campaign',
-        label: 'Kampagnen',
-        actions: [
-          { key: 'create', label: 'Erstellen' },
-          { key: 'read', label: 'Ansehen' },
-          { key: 'update', label: 'Bearbeiten' },
-        ],
-      },
-    ],
+    key: 'manage:KnowledgeBase',
+    action: 'manage',
+    subject: 'KnowledgeBase',
+    label: 'Wissensdatenbank erweitern',
+    icon: 'i-lucide-book-open',
   },
   {
-    label: 'Auswertungen',
-    icon: 'i-lucide-bar-chart-3',
-    items: [
-      {
-        subject: 'Report',
-        label: 'Berichte',
-        actions: [
-          { key: 'read', label: 'Ansehen' },
-          { key: 'view', label: 'Anzeigen' },
-          { key: 'export', label: 'Exportieren' },
-        ],
-      },
-      {
-        subject: 'Dashboard',
-        label: 'Dashboard',
-        actions: [
-          { key: 'read', label: 'Ansehen' },
-          { key: 'view', label: 'Anzeigen' },
-        ],
-      },
-    ],
+    key: 'delegate:CustomersAndTasks',
+    action: 'delegate',
+    subject: 'CustomersAndTasks',
+    label: 'Kunden & Aufgaben delegieren',
+    icon: 'i-lucide-send',
   },
   {
-    label: 'Verwaltung',
-    icon: 'i-lucide-shield',
-    items: [
-      {
-        subject: 'AdminPanel',
-        label: 'Admin-Bereich',
-        actions: [
-          { key: 'view', label: 'Zugriff' },
-        ],
-      },
-      {
-        subject: 'User',
-        label: 'Benutzer',
-        actions: [
-          { key: 'create', label: 'Erstellen' },
-          { key: 'read', label: 'Ansehen' },
-          { key: 'update', label: 'Bearbeiten' },
-          { key: 'delete', label: 'Löschen' },
-        ],
-      },
-      {
-        subject: 'Role',
-        label: 'Rollen',
-        actions: [
-          { key: 'read', label: 'Ansehen' },
-          { key: 'manage', label: 'Verwalten' },
-        ],
-      },
-      {
-        subject: 'Setting',
-        label: 'Einstellungen',
-        actions: [
-          { key: 'read', label: 'Ansehen' },
-          { key: 'manage', label: 'Verwalten' },
-        ],
-      },
-    ],
+    key: 'editOthers:CustomersAndTasks',
+    action: 'editOthers',
+    subject: 'CustomersAndTasks',
+    label: 'Kunden & Aufgaben von anderen bearbeiten',
+    icon: 'i-lucide-pencil',
+  },
+  {
+    key: 'viewOthers:CustomersAndTasks',
+    action: 'viewOthers',
+    subject: 'CustomersAndTasks',
+    label: 'Kunden & Aufgaben von anderen einsehen',
+    icon: 'i-lucide-eye',
+  },
+  {
+    key: 'import:Customer',
+    action: 'import',
+    subject: 'Customer',
+    label: 'Kunden importieren',
+    icon: 'i-lucide-upload',
+  },
+  {
+    key: 'edit:Dashboard',
+    action: 'edit',
+    subject: 'Dashboard',
+    label: 'Dashboard bearbeiten',
+    icon: 'i-lucide-layout-dashboard',
+  },
+  {
+    key: 'create:Appointment',
+    action: 'create',
+    subject: 'Appointment',
+    label: 'Termine legen',
+    icon: 'i-lucide-calendar-plus',
+  },
+  {
+    key: 'send:Email',
+    action: 'send',
+    subject: 'Email',
+    label: 'Mails versenden',
+    icon: 'i-lucide-mail',
+  },
+  {
+    key: 'call:Customer',
+    action: 'call',
+    subject: 'Customer',
+    label: 'Kunden anrufen',
+    icon: 'i-lucide-phone-call',
+  },
+  {
+    key: 'manage:Contact',
+    action: 'manage',
+    subject: 'Contact',
+    label: 'Kontakte erstellen & bearbeiten',
+    icon: 'i-lucide-user-plus',
+  },
+  {
+    key: 'delete:Customer',
+    action: 'delete',
+    subject: 'Customer',
+    label: 'Kunden löschen',
+    icon: 'i-lucide-user-x',
+  },
+  {
+    key: 'manage:Task',
+    action: 'manage',
+    subject: 'Task',
+    label: 'Aufgaben erstellen & bearbeiten',
+    icon: 'i-lucide-list-checks',
+  },
+  {
+    key: 'delete:Task',
+    action: 'delete',
+    subject: 'Task',
+    label: 'Aufgaben löschen',
+    icon: 'i-lucide-list-x',
   },
 ]
+
+/** Map from role ID to lucide icon name */
+export const ROLE_ICONS: Record<string, string> = {
+  admin: 'i-lucide-shield',
+  geschaeftsfuehrer: 'i-lucide-briefcase',
+  projektassistent: 'i-lucide-clipboard-list',
+  teamleiter: 'i-lucide-users',
+  abteilungsleiter: 'i-lucide-user-check',
+  verkaeufer: 'i-lucide-wallet',
+  anrufer: 'i-lucide-phone',
+  akquisitor: 'i-lucide-target',
+}

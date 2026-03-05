@@ -1,18 +1,31 @@
 export const ACTIONS = [
-  'create', 'read', 'update', 'delete',
-  'export', 'import', 'assign', 'approve',
-  'call', 'view', 'manage',
+  'manage',
+  'delegate',
+  'editOthers',
+  'viewOthers',
+  'import',
+  'edit',
+  'create',
+  'send',
+  'call',
+  'delete',
 ] as const
 
 export const SUBJECTS = [
-  'Lead', 'Contact', 'Deal', 'Invoice',
-  'Ticket', 'Task', 'CalendarEvent', 'Campaign',
-  'CallLog', 'EmailThread', 'Report', 'Dashboard',
-  'AdminPanel', 'User', 'Role', 'Setting', 'Teams',
+  'Rights',
+  'SystemConfig',
+  'KnowledgeBase',
+  'CustomersAndTasks',
+  'Customer',
+  'Dashboard',
+  'Appointment',
+  'Email',
+  'Contact',
+  'Task',
 ] as const
 
-export type Action = typeof ACTIONS[number]
-export type Subject = typeof SUBJECTS[number]
+export type Action = (typeof ACTIONS)[number]
+export type Subject = (typeof SUBJECTS)[number]
 
 export interface PermissionEntry {
   action: Action
@@ -21,95 +34,129 @@ export interface PermissionEntry {
 }
 
 export const ROLES_META = [
-  { id: 'superadmin', name: 'Superadmin', description: 'Vollzugriff auf das gesamte System. Verwaltet Mandanten, globale Einstellungen, Benutzerverwaltung, Audit-Logs.' },
-  { id: 'admin', name: 'Admin', description: 'Organisationsweiter Administrator. Verwaltet Benutzer, Rollen, CRM-Einstellungen, Integrationen.' },
-  { id: 'geschaeftsfuehrer', name: 'Geschäftsführer', description: 'Geschäftsleitung. Sieht alle Berichte, genehmigt Deals, überblickt alle Abteilungen und Teams.' },
-  { id: 'abteilungsleiter', name: 'Abteilungsleiter', description: 'Leitet eine Abteilung. Sieht Leistungsdashboards, kann Leads/Deals neu zuweisen und genehmigen.' },
-  { id: 'teamleiter', name: 'Teamleiter', description: 'Leitet ein Team. Sieht Team-Performance, genehmigt Deals, weist Leads neu zu.' },
-  { id: 'projektassistent', name: 'Projektassistent', description: 'Unterstützt Projekte und Teams. Verwaltet Aufgaben, Kalender, Tickets.' },
-  { id: 'verkaeufer', name: 'Verkäufer', description: 'Bearbeitet Leads, Kontakte, Deals und Rechnungen. Nur eigene Datensätze.' },
-  { id: 'anrufer', name: 'Anrufer', description: 'Tätigt/empfängt Anrufe über Teams-Integration. Sieht Anrufprotokolle und Kontaktkarten.' },
-  { id: 'akquisiteur', name: 'Akquisiteur', description: 'Neukundengewinnung und Kaltakquise. Erstellt und qualifiziert Leads, verwaltet Kampagnen.' },
+  { id: 'admin', name: 'Admin', description: 'Vollzugriff auf alle Funktionen und Einstellungen.' },
+  {
+    id: 'geschaeftsfuehrer',
+    name: 'Geschäftsführer',
+    description: 'Geschäftsleitung mit umfassenden Zugriffsrechten.',
+  },
+  {
+    id: 'projektassistent',
+    name: 'Projektassistent',
+    description: 'Unterstützt Projekte und Teams bei der täglichen Arbeit.',
+  },
+  {
+    id: 'teamleiter',
+    name: 'Teamleiter',
+    description: 'Leitet ein Team und verwaltet Kunden und Aufgaben.',
+  },
+  {
+    id: 'abteilungsleiter',
+    name: 'Abteilungsleiter',
+    description: 'Leitet eine Abteilung mit erweiterten Verwaltungsrechten.',
+  },
+  {
+    id: 'verkaeufer',
+    name: 'Verkäufer',
+    description: 'Bearbeitet Leads, Kontakte und Deals im Vertrieb.',
+  },
+  {
+    id: 'anrufer',
+    name: 'Anrufer',
+    description: 'Tätigt und empfängt Anrufe über die Telefonintegration.',
+  },
+  { id: 'akquisitor', name: 'Akquisitor', description: 'Neukundengewinnung und Kaltakquise.' },
 ] as const
 
+/** All available permission keys in the system */
+export const ALL_PERMISSION_KEYS: Array<{ action: Action; subject: Subject }> = [
+  { action: 'manage', subject: 'Rights' },
+  { action: 'manage', subject: 'SystemConfig' },
+  { action: 'manage', subject: 'KnowledgeBase' },
+  { action: 'delegate', subject: 'CustomersAndTasks' },
+  { action: 'editOthers', subject: 'CustomersAndTasks' },
+  { action: 'viewOthers', subject: 'CustomersAndTasks' },
+  { action: 'import', subject: 'Customer' },
+  { action: 'edit', subject: 'Dashboard' },
+  { action: 'create', subject: 'Appointment' },
+  { action: 'send', subject: 'Email' },
+  { action: 'call', subject: 'Customer' },
+  { action: 'manage', subject: 'Contact' },
+  { action: 'delete', subject: 'Customer' },
+  { action: 'manage', subject: 'Task' },
+  { action: 'delete', subject: 'Task' },
+]
+
 function allPermissions(): PermissionEntry[] {
-  return SUBJECTS.flatMap(subject =>
-    ACTIONS.map(action => ({ action, subject, granted: true })),
-  )
+  return ALL_PERMISSION_KEYS.map((p) => ({ ...p, granted: true }))
 }
 
-function permissions(...entries: Array<[Action, Subject]>): PermissionEntry[] {
-  return entries.map(([action, subject]) => ({ action, subject, granted: true }))
+function permissions(...keys: Array<[Action, Subject]>): PermissionEntry[] {
+  return keys.map(([action, subject]) => ({ action, subject, granted: true }))
 }
 
 export const DEFAULT_ROLE_PERMISSIONS: Record<string, PermissionEntry[]> = {
-  superadmin: allPermissions(),
+  admin: allPermissions(),
 
-  admin: allPermissions().filter(p =>
-    !(p.subject === 'Setting' && p.action === 'manage'),
-  ),
-
-  geschaeftsfuehrer: permissions(
-    ['read', 'Lead'], ['read', 'Contact'], ['read', 'Deal'], ['approve', 'Deal'],
-    ['read', 'Invoice'], ['read', 'Ticket'], ['read', 'Task'], ['read', 'CalendarEvent'],
-    ['read', 'Campaign'], ['read', 'CallLog'], ['read', 'EmailThread'],
-    ['read', 'Report'], ['view', 'Report'], ['read', 'Dashboard'], ['view', 'Dashboard'],
-    ['export', 'Report'],
+  geschaeftsfuehrer: allPermissions().filter(
+    (p) =>
+      !(p.action === 'manage' && p.subject === 'Rights') &&
+      !(p.action === 'manage' && p.subject === 'SystemConfig'),
   ),
 
   abteilungsleiter: permissions(
-    ['read', 'Lead'], ['update', 'Lead'], ['assign', 'Lead'],
-    ['read', 'Contact'], ['update', 'Contact'],
-    ['read', 'Deal'], ['update', 'Deal'], ['approve', 'Deal'],
-    ['read', 'Invoice'],
-    ['read', 'Ticket'], ['assign', 'Ticket'],
-    ['read', 'Task'], ['assign', 'Task'],
-    ['read', 'CalendarEvent'],
-    ['read', 'Report'], ['view', 'Report'], ['read', 'Dashboard'], ['view', 'Dashboard'],
+    ['manage', 'KnowledgeBase'],
+    ['delegate', 'CustomersAndTasks'],
+    ['editOthers', 'CustomersAndTasks'],
+    ['viewOthers', 'CustomersAndTasks'],
+    ['import', 'Customer'],
+    ['edit', 'Dashboard'],
+    ['create', 'Appointment'],
+    ['send', 'Email'],
+    ['call', 'Customer'],
+    ['manage', 'Contact'],
+    ['delete', 'Customer'],
+    ['manage', 'Task'],
+    ['delete', 'Task'],
   ),
 
   teamleiter: permissions(
-    ['read', 'Lead'], ['update', 'Lead'], ['assign', 'Lead'],
-    ['read', 'Contact'], ['update', 'Contact'],
-    ['read', 'Deal'], ['update', 'Deal'], ['approve', 'Deal'],
-    ['read', 'Invoice'],
-    ['read', 'Ticket'], ['assign', 'Ticket'],
-    ['read', 'Task'], ['create', 'Task'], ['update', 'Task'], ['assign', 'Task'],
-    ['read', 'CalendarEvent'], ['create', 'CalendarEvent'],
-    ['read', 'Report'], ['view', 'Dashboard'],
+    ['delegate', 'CustomersAndTasks'],
+    ['editOthers', 'CustomersAndTasks'],
+    ['viewOthers', 'CustomersAndTasks'],
+    ['edit', 'Dashboard'],
+    ['create', 'Appointment'],
+    ['send', 'Email'],
+    ['call', 'Customer'],
+    ['manage', 'Contact'],
+    ['delete', 'Customer'],
+    ['manage', 'Task'],
+    ['delete', 'Task'],
   ),
 
   projektassistent: permissions(
-    ['read', 'Lead'],
-    ['read', 'Contact'],
-    ['read', 'Deal'],
-    ['read', 'Ticket'], ['create', 'Ticket'], ['update', 'Ticket'],
-    ['read', 'Task'], ['create', 'Task'], ['update', 'Task'], ['assign', 'Task'],
-    ['read', 'CalendarEvent'], ['create', 'CalendarEvent'], ['update', 'CalendarEvent'],
-    ['view', 'Dashboard'],
+    ['viewOthers', 'CustomersAndTasks'],
+    ['edit', 'Dashboard'],
+    ['create', 'Appointment'],
+    ['send', 'Email'],
+    ['manage', 'Contact'],
+    ['manage', 'Task'],
   ),
 
   verkaeufer: permissions(
-    ['create', 'Lead'], ['read', 'Lead'], ['update', 'Lead'], ['delete', 'Lead'],
-    ['create', 'Contact'], ['read', 'Contact'], ['update', 'Contact'], ['delete', 'Contact'],
-    ['create', 'Deal'], ['read', 'Deal'], ['update', 'Deal'], ['delete', 'Deal'],
-    ['create', 'Invoice'], ['read', 'Invoice'], ['update', 'Invoice'],
-    ['read', 'Task'], ['create', 'Task'], ['update', 'Task'],
-    ['read', 'CalendarEvent'], ['create', 'CalendarEvent'],
-    ['view', 'Dashboard'],
+    ['create', 'Appointment'],
+    ['send', 'Email'],
+    ['call', 'Customer'],
+    ['manage', 'Contact'],
+    ['manage', 'Task'],
   ),
 
-  anrufer: permissions(
-    ['read', 'Contact'],
-    ['call', 'Teams'],
-    ['read', 'CallLog'], ['create', 'CallLog'],
-    ['view', 'Dashboard'],
-  ),
+  anrufer: permissions(['call', 'Customer'], ['manage', 'Contact']),
 
-  akquisiteur: permissions(
-    ['create', 'Lead'], ['read', 'Lead'], ['update', 'Lead'],
-    ['read', 'Contact'],
-    ['read', 'Campaign'], ['create', 'Campaign'], ['update', 'Campaign'],
-    ['view', 'Dashboard'],
+  akquisitor: permissions(
+    ['create', 'Appointment'],
+    ['send', 'Email'],
+    ['call', 'Customer'],
+    ['manage', 'Contact'],
   ),
 }
