@@ -1,7 +1,37 @@
 import { AbilityBuilder, createMongoAbility, type MongoAbility } from '@casl/ability'
 
-export type AppAction = 'create' | 'read' | 'update' | 'delete' | 'export' | 'import' | 'assign' | 'approve' | 'call' | 'view' | 'manage'
-export type AppSubject = 'Lead' | 'Contact' | 'Deal' | 'Invoice' | 'Ticket' | 'Task' | 'CalendarEvent' | 'Campaign' | 'CallLog' | 'EmailThread' | 'Report' | 'Dashboard' | 'AdminPanel' | 'User' | 'Role' | 'Setting' | 'Teams' | 'all'
+export type AppAction =
+  | 'create'
+  | 'read'
+  | 'update'
+  | 'delete'
+  | 'export'
+  | 'import'
+  | 'assign'
+  | 'approve'
+  | 'call'
+  | 'view'
+  | 'manage'
+export type AppSubject =
+  | 'Lead'
+  | 'Contact'
+  | 'Deal'
+  | 'Invoice'
+  | 'Ticket'
+  | 'Task'
+  | 'CalendarEvent'
+  | 'Campaign'
+  | 'CallLog'
+  | 'EmailThread'
+  | 'Report'
+  | 'Dashboard'
+  | 'AdminPanel'
+  | 'User'
+  | 'Role'
+  | 'Setting'
+  | 'Teams'
+  | 'Questionnaire'
+  | 'all'
 
 export type AppAbility = MongoAbility<[AppAction, AppSubject]>
 
@@ -18,7 +48,7 @@ export interface CaslUser {
 }
 
 export function defineAbilityFor(user: CaslUser | null): AppAbility {
-  const { can, cannot, build } = new AbilityBuilder<AppAbility>(createMongoAbility)
+  const { can, build } = new AbilityBuilder<AppAbility>(createMongoAbility)
 
   if (!user) {
     return build()

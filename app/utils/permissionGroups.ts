@@ -112,6 +112,13 @@ export const PERMISSIONS: Permission[] = [
     label: 'Aufgaben löschen',
     icon: 'i-lucide-list-x',
   },
+  {
+    key: 'manage:Questionnaire',
+    action: 'manage',
+    subject: 'Questionnaire',
+    label: 'Fragebögen verwalten',
+    icon: 'i-lucide-clipboard-list',
+  },
 ]
 
 /** Map from role ID to lucide icon name */

@@ -56,6 +56,16 @@ const { can } = useAbility()
           :disabled="!can('read', 'Setting')"
         />
       </LayoutAppSidebarGroup>
+
+      <!-- VERTRIEB -->
+      <LayoutAppSidebarGroup label="Vertrieb">
+        <LayoutAppSidebarItem
+          icon="i-lucide-clipboard-list"
+          label="Fragebogen"
+          to="/fragebogen"
+          :disabled="!can('manage', 'Questionnaire')"
+        />
+      </LayoutAppSidebarGroup>
     </nav>
 
     <!-- Collapse toggle (desktop only) -->

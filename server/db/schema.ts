@@ -175,3 +175,157 @@ export const contactsRelations = relations(contacts, ({ one }) => ({
     references: [companies.id],
   }),
 }))
+
+// --- Questionnaire System ---
+
+export const questionnaireTemplates = pgTable(
+  'questionnaire_templates',
+  {
+    id: text('id')
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    tenantId: text('tenant_id').notNull(),
+    name: text('name').notNull(),
+    description: text('description'),
+    isActive: boolean('is_active').notNull().default(true),
+    createdBy: text('created_by').references(() => users.id, {
+      onDelete: 'set null',
+    }),
+    createdAt: timestamp('created_at')
+      .notNull()
+      .default(sql`now()`),
+    updatedAt: timestamp('updated_at'),
+  },
+  (table) => [index('qt_tenant_idx').on(table.tenantId)],
+)
+
+export const questionnaireTemplatesRelations = relations(
+  questionnaireTemplates,
+  ({ many, one }) => ({
+    questions: many(questionnaireQuestions),
+    submissions: many(questionnaireSubmissions),
+    creator: one(users, {
+      fields: [questionnaireTemplates.createdBy],
+      references: [users.id],
+    }),
+  }),
+)
+
+export const questionnaireQuestions = pgTable(
+  'questionnaire_questions',
+  {
+    id: text('id')
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    templateId: text('template_id')
+      .notNull()
+      .references(() => questionnaireTemplates.id, { onDelete: 'cascade' }),
+    parentQuestionId: text('parent_question_id'),
+    conditionValue: text('condition_value'),
+    sortOrder: integer('sort_order').notNull().default(0),
+    type: text('type').notNull(),
+    questionText: text('question_text').notNull(),
+    options: text('options'),
+    isRequired: boolean('is_required').notNull().default(false),
+    offerText: text('offer_text'),
+  },
+  (table) => [index('qq_template_sort_idx').on(table.templateId, table.sortOrder)],
+)
+
+export const questionnaireQuestionsRelations = relations(
+  questionnaireQuestions,
+  ({ one, many }) => ({
+    template: one(questionnaireTemplates, {
+      fields: [questionnaireQuestions.templateId],
+      references: [questionnaireTemplates.id],
+    }),
+    parentQuestion: one(questionnaireQuestions, {
+      fields: [questionnaireQuestions.parentQuestionId],
+      references: [questionnaireQuestions.id],
+      relationName: 'parentChild',
+    }),
+    childQuestions: many(questionnaireQuestions, {
+      relationName: 'parentChild',
+    }),
+    answers: many(questionnaireAnswers),
+  }),
+)
+
+export const questionnaireSubmissions = pgTable(
+  'questionnaire_submissions',
+  {
+    id: text('id')
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    tenantId: text('tenant_id').notNull(),
+    templateId: text('template_id')
+      .notNull()
+      .references(() => questionnaireTemplates.id),
+    companyId: integer('company_id')
+      .notNull()
+      .references(() => companies.id),
+    completedBy: text('completed_by').references(() => users.id, {
+      onDelete: 'set null',
+    }),
+    status: text('status').notNull().default('in_progress'),
+    pdfPath: text('pdf_path'),
+    sentVia: text('sent_via'),
+    sentAt: timestamp('sent_at'),
+    createdAt: timestamp('created_at')
+      .notNull()
+      .default(sql`now()`),
+  },
+  (table) => [
+    index('qs_tenant_idx').on(table.tenantId),
+    index('qs_company_idx').on(table.companyId),
+    index('qs_template_idx').on(table.templateId),
+  ],
+)
+
+export const questionnaireSubmissionsRelations = relations(
+  questionnaireSubmissions,
+  ({ one, many }) => ({
+    template: one(questionnaireTemplates, {
+      fields: [questionnaireSubmissions.templateId],
+      references: [questionnaireTemplates.id],
+    }),
+    company: one(companies, {
+      fields: [questionnaireSubmissions.companyId],
+      references: [companies.id],
+    }),
+    completedByUser: one(users, {
+      fields: [questionnaireSubmissions.completedBy],
+      references: [users.id],
+    }),
+    answers: many(questionnaireAnswers),
+  }),
+)
+
+export const questionnaireAnswers = pgTable(
+  'questionnaire_answers',
+  {
+    id: text('id')
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    submissionId: text('submission_id')
+      .notNull()
+      .references(() => questionnaireSubmissions.id, { onDelete: 'cascade' }),
+    questionId: text('question_id')
+      .notNull()
+      .references(() => questionnaireQuestions.id),
+    answerValue: text('answer_value'),
+    answerOptions: text('answer_options'),
+  },
+  (table) => [index('qa_submission_idx').on(table.submissionId)],
+)
+
+export const questionnaireAnswersRelations = relations(questionnaireAnswers, ({ one }) => ({
+  submission: one(questionnaireSubmissions, {
+    fields: [questionnaireAnswers.submissionId],
+    references: [questionnaireSubmissions.id],
+  }),
+  question: one(questionnaireQuestions, {
+    fields: [questionnaireAnswers.questionId],
+    references: [questionnaireQuestions.id],
+  }),
+}))

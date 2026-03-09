@@ -80,7 +80,9 @@
       "Bash(del \"server\\\\api\\\\customers\\\\import.post.ts\")",
       "Bash(del \"server\\\\api\\\\customers\\\\import-log.post.ts\")",
       "Bash(del \"server\\\\api\\\\customers\\\\sample-excel.get.ts\")",
-      "Bash(del \"server\\\\api\\\\customers\\\\[id]\\\\change-log.get.ts\")"
+      "Bash(del \"server\\\\api\\\\customers\\\\[id]\\\\change-log.get.ts\")",
+      "Bash(npx drizzle-kit:*)",
+      "Bash(findstr:*)"
     ]
   }
 }

@@ -22,6 +22,7 @@ export const SUBJECTS = [
   'Email',
   'Contact',
   'Task',
+  'Questionnaire',
 ] as const
 
 export type Action = (typeof ACTIONS)[number]
@@ -85,6 +86,7 @@ export const ALL_PERMISSION_KEYS: Array<{ action: Action; subject: Subject }> = 
   { action: 'delete', subject: 'Customer' },
   { action: 'manage', subject: 'Task' },
   { action: 'delete', subject: 'Task' },
+  { action: 'manage', subject: 'Questionnaire' },
 ]
 
 function allPermissions(): PermissionEntry[] {
@@ -118,6 +120,7 @@ export const DEFAULT_ROLE_PERMISSIONS: Record<string, PermissionEntry[]> = {
     ['delete', 'Customer'],
     ['manage', 'Task'],
     ['delete', 'Task'],
+    ['manage', 'Questionnaire'],
   ),
 
   teamleiter: permissions(
@@ -132,6 +135,7 @@ export const DEFAULT_ROLE_PERMISSIONS: Record<string, PermissionEntry[]> = {
     ['delete', 'Customer'],
     ['manage', 'Task'],
     ['delete', 'Task'],
+    ['manage', 'Questionnaire'],
   ),
 
   projektassistent: permissions(
@@ -149,14 +153,16 @@ export const DEFAULT_ROLE_PERMISSIONS: Record<string, PermissionEntry[]> = {
     ['call', 'Customer'],
     ['manage', 'Contact'],
     ['manage', 'Task'],
+    ['manage', 'Questionnaire'],
   ),
 
-  anrufer: permissions(['call', 'Customer'], ['manage', 'Contact']),
+  anrufer: permissions(['call', 'Customer'], ['manage', 'Contact'], ['manage', 'Questionnaire']),
 
   akquisitor: permissions(
     ['create', 'Appointment'],
     ['send', 'Email'],
     ['call', 'Customer'],
     ['manage', 'Contact'],
+    ['manage', 'Questionnaire'],
   ),
 }
