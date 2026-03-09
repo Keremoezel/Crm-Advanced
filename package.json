@@ -20,7 +20,9 @@
     "test:e2e:ui": "playwright test --ui",
     "test": "pnpm run test:unit && pnpm run test:e2e",
     "prepare": "husky",
-    "db:generate": "drizzle-kit generate --config .nuxt/hub/db/drizzle.config.ts",
+    "db:generate": "drizzle-kit generate --config drizzle.config.ts",
+    "db:migrate": "drizzle-kit migrate --config drizzle.config.ts",
+    "db:push": "drizzle-kit push --config drizzle.config.ts",
     "deploy:cloudflare": "NITRO_PRESET=cloudflare_module pnpm run build && npx wrangler deploy"
   },
   "lint-staged": {
@@ -36,6 +38,7 @@
     "@casl/ability": "^6.8.0",
     "@casl/vue": "^2.2.6",
     "@libsql/client": "^0.15.15",
+    "@neondatabase/serverless": "^1.0.2",
     "@nuxt/eslint": "^1.15.2",
     "@nuxt/ui": "^4.5.0",
     "@nuxthub/core": "^0.10.6",
@@ -44,6 +47,7 @@
     "drizzle-kit": "^0.31.9",
     "drizzle-orm": "^0.45.1",
     "nuxt": "^4.3.1",
+    "nuxt-security": "^2.5.1",
     "tailwindcss": "^4.2.1"
   },
   "devDependencies": {

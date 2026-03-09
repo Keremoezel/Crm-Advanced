@@ -1,3 +1,8 @@
+---
+description:
+alwaysApply: true
+---
+
 # CRM-Advanced — Project Instructions
 
 ## What Is This Project?

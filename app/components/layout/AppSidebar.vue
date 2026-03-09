@@ -44,15 +44,15 @@ const { can } = useAbility()
           :disabled="!can('read', 'Role')"
         />
         <LayoutAppSidebarItem
-          icon="i-lucide-settings"
-          label="Einstellungen"
-          to="/admin/einstellungen"
-          :disabled="!can('read', 'Setting')"
-        />
-        <LayoutAppSidebarItem
           icon="i-lucide-dessert"
           label="Kunden"
           to="/admin/kunden"
+          :disabled="!can('read', 'Setting')"
+        />
+        <LayoutAppSidebarItem
+          icon="i-lucide-settings"
+          label="Einstellungen"
+          to="/admin/einstellungen"
           :disabled="!can('read', 'Setting')"
         />
       </LayoutAppSidebarGroup>

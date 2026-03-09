@@ -1,17 +1,26 @@
 import { sql, relations } from 'drizzle-orm'
-import { sqliteTable, text, integer, uniqueIndex, index } from 'drizzle-orm/sqlite-core'
+import {
+  pgTable,
+  text,
+  boolean,
+  integer,
+  serial,
+  timestamp,
+  uniqueIndex,
+  index,
+} from 'drizzle-orm/pg-core'
 
-export const roles = sqliteTable('roles', {
+export const roles = pgTable('roles', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
   description: text('description').notNull().default(''),
-  isSystem: integer('is_system', { mode: 'boolean' }).notNull().default(true),
+  isSystem: boolean('is_system').notNull().default(true),
   createdAt: text('created_at')
     .notNull()
     .$defaultFn(() => new Date().toISOString()),
 })
 
-export const users = sqliteTable('users', {
+export const users = pgTable('users', {
   id: text('id')
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
@@ -20,7 +29,7 @@ export const users = sqliteTable('users', {
   roleId: text('role_id')
     .notNull()
     .references(() => roles.id),
-  isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
+  isActive: boolean('is_active').notNull().default(true),
   createdAt: text('created_at')
     .notNull()
     .$defaultFn(() => new Date().toISOString()),
@@ -29,7 +38,7 @@ export const users = sqliteTable('users', {
     .$defaultFn(() => new Date().toISOString()),
 })
 
-export const userPermissions = sqliteTable(
+export const userPermissions = pgTable(
   'user_permissions',
   {
     id: text('id')
@@ -40,12 +49,12 @@ export const userPermissions = sqliteTable(
       .references(() => users.id, { onDelete: 'cascade' }),
     action: text('action').notNull(),
     subject: text('subject').notNull(),
-    granted: integer('granted', { mode: 'boolean' }).notNull().default(true),
+    granted: boolean('granted').notNull().default(true),
   },
   (table) => [uniqueIndex('user_action_subject_idx').on(table.userId, table.action, table.subject)],
 )
 
-export const rolePermissions = sqliteTable(
+export const rolePermissions = pgTable(
   'role_permissions',
   {
     id: text('id')
@@ -56,15 +65,15 @@ export const rolePermissions = sqliteTable(
       .references(() => roles.id, { onDelete: 'cascade' }),
     action: text('action').notNull(),
     subject: text('subject').notNull(),
-    granted: integer('granted', { mode: 'boolean' }).notNull().default(true),
+    granted: boolean('granted').notNull().default(true),
   },
   (table) => [uniqueIndex('role_action_subject_idx').on(table.roleId, table.action, table.subject)],
 )
 
-export const companies = sqliteTable(
+export const companies = pgTable(
   'companies',
   {
-    id: integer('id').primaryKey({ autoIncrement: true }),
+    id: serial('id').primaryKey(),
     tenantId: text('tenant_id').notNull(),
     name: text('name').notNull(),
     project: text('project'),
@@ -82,10 +91,10 @@ export const companies = sqliteTable(
     city: text('city'),
     state: text('state'),
     foundingDate: text('founding_date'),
-    createdAt: integer('created_at', { mode: 'timestamp' })
+    createdAt: timestamp('created_at')
       .notNull()
-      .default(sql`CURRENT_TIMESTAMP`),
-    updatedAt: integer('updated_at', { mode: 'timestamp' }),
+      .default(sql`now()`),
+    updatedAt: timestamp('updated_at'),
   },
   (table) => [index('companies_tenant_idx').on(table.tenantId)],
 )
@@ -98,10 +107,10 @@ export const companiesRelations = relations(companies, ({ one, many }) => ({
   contacts: many(contacts),
 }))
 
-export const conversationNotes = sqliteTable(
+export const conversationNotes = pgTable(
   'conversation_notes',
   {
-    id: integer('id').primaryKey({ autoIncrement: true }),
+    id: serial('id').primaryKey(),
     tenantId: text('tenant_id').notNull(),
     companyId: integer('company_id')
       .notNull()
@@ -112,9 +121,9 @@ export const conversationNotes = sqliteTable(
     updatedBy: text('updated_by').references(() => users.id, {
       onDelete: 'set null',
     }),
-    updatedAt: integer('updated_at', { mode: 'timestamp' })
+    updatedAt: timestamp('updated_at')
       .notNull()
-      .default(sql`CURRENT_TIMESTAMP`),
+      .default(sql`now()`),
   },
   (table) => [index('conv_notes_tenant_idx').on(table.tenantId)],
 )
@@ -130,10 +139,10 @@ export const conversationNotesRelations = relations(conversationNotes, ({ one })
   }),
 }))
 
-export const contacts = sqliteTable(
+export const contacts = pgTable(
   'contacts',
   {
-    id: integer('id').primaryKey({ autoIncrement: true }),
+    id: serial('id').primaryKey(),
     tenantId: text('tenant_id').notNull(),
     companyId: integer('company_id')
       .notNull()
@@ -142,17 +151,17 @@ export const contacts = sqliteTable(
     lastName: text('last_name'),
     email: text('email'),
     phone: text('phone'),
-    isPrimary: integer('is_primary', { mode: 'boolean' }).notNull().default(false),
+    isPrimary: boolean('is_primary').notNull().default(false),
     position: text('position'),
     birthDate: text('birth_date'),
     linkedin: text('linkedin'),
     xing: text('xing'),
     facebook: text('facebook'),
     notes: text('notes'),
-    createdAt: integer('created_at', { mode: 'timestamp' })
+    createdAt: timestamp('created_at')
       .notNull()
-      .default(sql`CURRENT_TIMESTAMP`),
-    updatedAt: integer('updated_at', { mode: 'timestamp' }),
+      .default(sql`now()`),
+    updatedAt: timestamp('updated_at'),
   },
   (table) => [
     index('contacts_tenant_idx').on(table.tenantId),

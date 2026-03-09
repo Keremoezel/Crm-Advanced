@@ -6,6 +6,7 @@
         v-for="stat in stats"
         :key="stat.label"
         class="hover:border-[#720923]/30 transition-colors shadow-sm"
+        :ui="{ body: 'p-6' }"
       >
         <div class="flex items-center">
           <div :class="['p-3 rounded-full mr-4', stat.bgColor]">
@@ -23,7 +24,13 @@
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
       <!-- New User Form -->
       <div class="xl:col-span-1">
-        <UCard class="h-full shadow-md">
+        <UCard
+          class="h-full shadow-md"
+          :ui="{
+            header: 'bg-gray-50/50 dark:bg-gray-800 px-6 py-5',
+            body: 'p-6',
+          }"
+        >
           <template #header>
             <div class="flex justify-between items-center">
               <h3 class="text-lg font-bold text-[#720923] dark:text-white">
@@ -105,7 +112,14 @@
 
       <!-- Users Table -->
       <div class="xl:col-span-2">
-        <UCard class="shadow-md flex flex-col h-full">
+        <UCard
+          class="shadow-md flex flex-col h-full"
+          :ui="{
+            header: 'bg-gray-50/50 dark:bg-gray-800 px-6 py-5',
+            body: 'p-0',
+            footer: 'bg-gray-50/50 dark:bg-gray-900/20 px-6 py-4',
+          }"
+        >
           <template #header>
             <div
               class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
